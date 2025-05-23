@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calm & Neutral Color Preview</title>
+  <style>
+    :root {
+      --primary-cool-gray: #3A506B;
+      --accent-green: #98C379;
+      --neutral-light-beige: #F7F3E9;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--neutral-light-beige);
+      color: var(--primary-cool-gray);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .color-box {
+      width: 100%;
+      max-width: 300px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin: 10px 0;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .primary-cool-gray { background-color: var(--primary-cool-gray); }
+    .accent-green { background-color: var(--accent-green); color: var(--primary-cool-gray); }
+    .neutral-light-beige { background-color: var(--neutral-light-beige); color: var(--primary-cool-gray); }
+  </style>
+</head>
+<body>
+
+  <h1>Calm & Neutral Color Preview</h1>
+
+  <div class="color-box primary-cool-gray">Primary Cool Gray (#3A506B)</div>
+  <div class="color-box accent-green">Accent Green (#98C379)</div>
+  <div class="color-box neutral-light-beige">Light Beige Background (#F7F3E9)</div>
+
+</body>
+</html>
