@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
-import Tradespersondashboard from './pages/Tradesperson';
+import TradespersonDashboard from './pages/Tradesperson';
 import Userdash from './pages/Userdashboard';
 import Services from './pages/Services';
 import TradespersonProfile from './pages/tradespersonprofile';
@@ -40,7 +40,7 @@ function App() {
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/userdash" element={<Userdash/>}/>
-          <Route path="/tradespersondash" element={<Tradespersondashboard/>}/>
+          <Route path="/tradespersondash" element={<TradespersonDashboard/>}/>
           <Route path="/tradespersonProfile" element={<TradespersonProfile/>}/>
           <Route path="/services" element={<Services/>}/>
           <Route path="/tpview" element={<TPV/>}/>
