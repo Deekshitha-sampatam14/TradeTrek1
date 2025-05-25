@@ -45,7 +45,11 @@ const TradespersonDashboard = () => {
         tradespersonEmail: rdata.email, // Pass tradesperson's email
       };
   
-      const res = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/booking_accept_decline`, {
+      const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+
+      const res = await fetch(`${baseUrl}/api/auth/booking_accept_decline`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

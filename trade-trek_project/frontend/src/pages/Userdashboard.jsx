@@ -48,8 +48,10 @@ const UserDashboard = () => {
     const fetchNearbyTradespeople = async () => {
       if (rdata) {
         try {
-          const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-          const response = await fetch(`${apiUrl}/api/auth/nearby_loc`, {
+          const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+          const response = await fetch(`${baseUrl}/api/auth/nearby_loc`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -87,8 +89,10 @@ const UserDashboard = () => {
 
     try {
  
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const response = await fetch('${apiUrl}/api/auth/nearby', {
+      const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+      const response = await fetch('${baseUrl}/api/auth/nearby', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

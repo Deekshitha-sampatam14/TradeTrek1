@@ -14,17 +14,17 @@ function Loc() {
   };
 
   const handleSubmit = async () => {
-    
-const location=loc;
+    const locationInput = loc;
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
       const response = await fetch(`${apiUrl}/api/auth/nearby`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({service,location}),
+        body: JSON.stringify({ service, location: locationInput }),
       });
 
       const data = await response.json();
@@ -32,19 +32,17 @@ const location=loc;
       if (response.ok) {
         navigate("/tlist", { state: { tdata: data } });
         console.log(data);
-      }
-      else {
-        alert(data.message || 'An error occurred.');
+      } else {
+        alert(data.message || "An error occurred.");
       }
     } catch (error) {
       console.error("Error fetching tradespeople:", error);
-      alert('An error occurred.');
+      alert("An error occurred.");
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      {/* Animation Heading */}
       <motion.h1
         className="text-3xl font-bold text-[#3A506B] mb-6"
         initial={{ opacity: 0, y: -20 }}
@@ -54,7 +52,6 @@ const location=loc;
         Find Nearby Tradespeople
       </motion.h1>
 
-      {/* Input and Button */}
       <div className="flex flex-col items-center space-y-4">
         <input
           type="text"

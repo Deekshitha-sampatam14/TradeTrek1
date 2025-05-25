@@ -110,8 +110,11 @@ const SignUp = () => {
           formDataToSend.append(key, formData[key]);
         });
   
-        const apiUrl = `${process.env.REACT_APP_API_URL} || 'http://localhost:5000'/api/auth/signup`;
-        const response = await fetch(apiUrl, {
+        const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+  
+        const response = await fetch(`${baseUrl}/api/auth/signup`, {
           method: 'POST',
           body: formDataToSend,
         });

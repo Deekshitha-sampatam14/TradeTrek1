@@ -34,7 +34,11 @@ const TradespersonProfile = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/bookings/user`, {
+        const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+  
+        const response = await fetch(`${baseUrl}/api/auth/bookings/user`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -96,8 +100,12 @@ const TradespersonProfile = () => {
   };
 
   try {
+
+    const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
     
-    const response = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/bookings`, {
+    const response = await fetch(`${baseUrl}/api/auth/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -110,7 +118,11 @@ const TradespersonProfile = () => {
     if (response.ok) {
       alert("Booking successful!");
 
-      const responseNotify = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/notify-tradesperson`, {
+      const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+
+      const responseNotify = await fetch(`${baseUrl}/api/auth/notify-tradesperson`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +158,11 @@ const handleReviewSubmit = async (e) => {
   };
 
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/add-review`, {
+    const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+
+    const response = await fetch(`${baseUrl}/api/auth/add-review`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

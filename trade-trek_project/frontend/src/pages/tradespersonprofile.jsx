@@ -88,8 +88,11 @@ const TradespersonProfile = () => {
     }
 
     try {
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/auth/update-profile`, {
+        const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+
+      const response = await fetch(`${baseUrl}/api/auth/update-profile`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Fixed template literal
@@ -101,7 +104,7 @@ const TradespersonProfile = () => {
         alert("Profile updated successfully!");
 
         // Fetch updated data to reflect changes on the dashboard
-        const updatedDataResponse = await fetch("/api/auth/profile", {
+        const updatedDataResponse = await fetch(`${baseUrl}/api/auth/profile`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`, // Fixed template literal
@@ -149,8 +152,11 @@ const TradespersonProfile = () => {
 
   const fetchOriginalProfile = async () => {
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/auth/profile`, {
+      const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+
+      const response = await fetch(`${baseUrl}/api/auth/profile`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Fixed template literal
         },

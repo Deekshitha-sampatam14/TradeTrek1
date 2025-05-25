@@ -52,8 +52,11 @@ const Login=()=>{
       if (!validate()) return;
       setLoading(true);
       try {
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-        const response = await fetch('${apiUrl}/api/auth/login', {
+        const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+  
+        const response = await fetch('${baseUrl}/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, password: formData.password }),

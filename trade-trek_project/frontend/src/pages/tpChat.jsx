@@ -26,8 +26,12 @@ const TradespersonChats = () => {
 
   const fetchChats = async () => {
     try {
+      const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+  
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/getTradespersonChats`,
+        `${baseUrl}/api/auth/getTradespersonChats`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
