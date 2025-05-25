@@ -34,7 +34,7 @@ const TradespersonProfile = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/bookings/user`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/bookings/user`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -97,7 +97,7 @@ const TradespersonProfile = () => {
 
   try {
     
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/bookings`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -110,7 +110,7 @@ const TradespersonProfile = () => {
     if (response.ok) {
       alert("Booking successful!");
 
-      const responseNotify = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/notify-tradesperson`, {
+      const responseNotify = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/notify-tradesperson`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +146,7 @@ const handleReviewSubmit = async (e) => {
   };
 
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/add-review`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/add-review`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

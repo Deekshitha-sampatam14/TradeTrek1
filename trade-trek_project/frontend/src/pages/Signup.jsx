@@ -110,7 +110,7 @@ const SignUp = () => {
           formDataToSend.append(key, formData[key]);
         });
   
-        const apiUrl = `${process.env.REACT_APP_API_URL}/api/auth/signup`;
+        const apiUrl = `${process.env.REACT_APP_API_URL} || 'http://localhost:5000'/api/auth/signup`;
         const response = await fetch(apiUrl, {
           method: 'POST',
           body: formDataToSend,

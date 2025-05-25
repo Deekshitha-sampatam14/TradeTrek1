@@ -27,7 +27,7 @@ const TradespersonChats = () => {
   const fetchChats = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/auth/getTradespersonChats`,
+        `${process.env.REACT_APP_API_URL}|| 'http://localhost:5000'/api/auth/getTradespersonChats`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

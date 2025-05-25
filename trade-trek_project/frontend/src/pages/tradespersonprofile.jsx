@@ -88,7 +88,8 @@ const TradespersonProfile = () => {
     }
 
     try {
-      const response = await fetch("/api/auth/update-profile", {
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/auth/update-profile`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Fixed template literal
@@ -148,7 +149,8 @@ const TradespersonProfile = () => {
 
   const fetchOriginalProfile = async () => {
     try {
-      const response = await fetch("/api/auth/profile", {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/auth/profile`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Fixed template literal
         },

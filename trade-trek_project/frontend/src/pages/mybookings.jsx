@@ -8,7 +8,9 @@ const MyBookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch("/api/bookings/user", {
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        
+        const response = await fetch(`${apiUrl}/api/bookings/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
