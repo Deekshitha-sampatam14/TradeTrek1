@@ -99,7 +99,7 @@ const Services = () => {
   ? "https://tradetrek.onrender.com"
   : "http://localhost:5000";
 
-      const response = await fetch('${baseUrl}/api/auth/nearby', {
+      const response = await fetch(`${baseUrl}/api/auth/nearby`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
