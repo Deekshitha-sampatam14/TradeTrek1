@@ -18,6 +18,7 @@ import MyBookings from './pages/mybookings';
 import Sign_login_req from './pages/sign_login_request';
 import AlternativeServices from './pages/alt_services';
 import TradespersonChats from "./pages/tpChat";
+import Logout from './pages/logout';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -49,6 +50,7 @@ function App() {
           <Route path="/sign_login_req" element={<Sign_login_req/>} />
           <Route path="/alt_services" element={<AlternativeServices/>}/>
           <Route path="/tradesperson-chats" element={<TradespersonChats />} />
+          <Route path="/logout" element={<Logout/>}/>
         </Routes>
         <Footer/>
       </div>
