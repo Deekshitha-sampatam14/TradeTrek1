@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
-import TradespersonDashboard from './pages/Tradesperson';
+import TradespersonDashboard from './pages/TradespersonDashboard.jsx';
 import Userdash from './pages/Userdashboard';
 import Services from './pages/Services';
 import TradespersonProfile from './pages/tradespersonprofile';
