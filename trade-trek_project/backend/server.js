@@ -12,35 +12,33 @@ dotenv.config();
 const app = express();
 
 const server = http.createServer(app);
+
+const allowedOrigin = 'https://tradetrek-nu.vercel.app'; // <-- update this to your exact frontend origin
+
 const io = new Server(server, {
   cors: {
-    origin: 'https://tradetrek-frontend.onrender.com',  // your deployed frontend URL
+    origin: allowedOrigin,
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
-// Enable CORS middleware with your frontend URL
 app.use(cors({
-  origin: 'https://tradetrek-nu.vercel.app/',
+  origin: allowedOrigin,
   credentials: true,
 }));
 
-// Middleware for parsing JSON and URL encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploads folder for images/files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Use your auth routes under /api/auth
 app.use('/api/auth', authRoutes);
 
-// Basic test route
 app.get('/', (req, res) => {
   res.send('Hello from backend');
 });
 
-// WebSocket Logic
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -65,24 +63,11 @@ io.on('connection', (socket) => {
   });
 });
 
-// Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI)  // no need for deprecated options
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB Connected');
     const PORT = process.env.PORT || 5000;
     server.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
   })
   .catch((err) => console.error('MongoDB connection error:', err));
-
-// Optional: Only serve frontend build if backend and frontend are in same project and deployed together
-// Since you deployed frontend separately, you can comment out these lines:
-
-/*
-// Serve frontend build statically
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
-});
-*/
