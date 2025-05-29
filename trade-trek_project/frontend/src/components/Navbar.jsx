@@ -22,7 +22,7 @@ function Navbar() {
           </div>
 
           <div className='flex text-center space-x-10'>
-            <Link to="/" className="hover:text-[#F7F3E9] hover:bg-[#98C379] hover:rounded-md hover:p-2">Home</Link>
+        
 
             {!isLoggedIn && (
               <>
