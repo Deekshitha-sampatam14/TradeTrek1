@@ -21,7 +21,7 @@ const io = new Server(server, {
 
 // Enable CORS middleware with your frontend URL
 app.use(cors({
-  origin: 'https://tradetrek-frontend.onrender.com',
+  origin: 'https://tradetrek-nu.vercel.app/',
   credentials: true,
 }));
 
