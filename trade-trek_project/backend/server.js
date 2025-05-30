@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes'); 
+const authRoutes = require('./routes/authRoutes');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -12,44 +12,32 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// Allow multiple frontend origins
-const allowedOrigins = [
-  'https://tradetrek-nu.vercel.app',
-  'https://tradetrek-frontend.onrender.com',
-];
+// Update this to match your frontend URL exactly
+const allowedOrigin = 'https://tradetrek-nu.vercel.app';
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: allowedOrigin,
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
 
-// CORS middleware for Express
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: allowedOrigin,
   credentials: true,
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello from backend');
 });
 
-// Socket.io handlers
+// Socket.IO logic
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -74,7 +62,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// MongoDB connection and server start
+// Connect to MongoDB and start the server
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
