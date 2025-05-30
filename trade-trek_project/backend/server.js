@@ -1,43 +1,54 @@
+// server.js
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
+const authRoutes = require('./routes/authRoutes');
 const Message = require('./models/messageModel');
 
 dotenv.config();
+
 const app = express();
 const server = http.createServer(app);
 
-// Update this to match your frontend URL exactly
+// Define the allowed origin
 const allowedOrigin = 'https://tradetrek-nu.vercel.app';
 
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigin,
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-});
-
-app.use(cors({
+// Configure CORS options
+const corsOptions = {
   origin: allowedOrigin,
+  methods: ['GET', 'POST'],
   credentials: true,
-}));
+};
 
+// Apply CORS middleware to Express
+app.use(cors(corsOptions));
+
+// Parse incoming requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Define routes
 app.use('/api/auth', authRoutes);
 
+// Root route
 app.get('/', (req, res) => {
   res.send('Hello from backend');
 });
 
-// Socket.IO logic
+// Initialize Socket.IO with CORS options
+const io = new Server(server, {
+  cors: corsOptions,
+});
+
+// Handle Socket.IO connections
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
