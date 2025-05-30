@@ -1,71 +1,72 @@
-// server.js
-
 const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
+const app = express();
 const dotenv = require('dotenv');
-const cors = require('cors');
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 const http = require('http');
 const { Server } = require('socket.io');
-const authRoutes = require('./routes/authRoutes');
-const Message = require('./models/messageModel');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const path = require('path');
 
+// Load environment variables
 dotenv.config();
 
-const app = express();
-const server = http.createServer(app);
+// Connect to MongoDB
+connectDB();
 
-// Define the allowed origin
-const allowedOrigin = 'https://tradetrek-nu.vercel.app';
+// Allowed origins for CORS
+const allowedOrigins = [
+  'https://tradetrek-nu.vercel.app',
+  'https://tradetrek-frontend.onrender.com',
+  'http://localhost:3000',
+];
 
-// Configure CORS options
+// CORS options
 const corsOptions = {
-  origin: allowedOrigin,
-  methods: ['GET', 'POST'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS: ' + origin));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 };
 
-// Apply CORS middleware to Express
+// Middleware
 app.use(cors(corsOptions));
-
-// Parse incoming requests
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// Serve static files
+// Static file serving (e.g., uploaded profile images)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Define routes
+// Routes
 app.use('/api/auth', authRoutes);
 
-// Root route
-app.get('/', (req, res) => {
-  res.send('Hello from backend');
-});
-
-// Initialize Socket.IO with CORS options
+// Create server and attach Socket.IO
+const server = http.createServer(app);
 const io = new Server(server, {
-  cors: corsOptions,
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
 });
 
-// Handle Socket.IO connections
+// Socket.IO logic
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
+  console.log('User connected:', socket.id);
 
-  socket.on('join-room', async (roomId) => {
+  socket.on('join-room', (roomId) => {
     socket.join(roomId);
-    console.log(`User joined room: ${roomId}`);
-
-    const previousMessages = await Message.find({ roomId }).sort({ timestamp: 1 });
-    socket.emit('previous_messages', previousMessages);
+    console.log(`User ${socket.id} joined room ${roomId}`);
   });
 
-  socket.on('send-message', async (data) => {
-    const { sender, senderName, text, timestamp, roomId } = data;
-    const newMessage = new Message({ sender, senderName, text, timestamp, roomId });
-    await newMessage.save();
-
-    io.to(roomId).emit('receive-message', data);
+  socket.on('send-message', ({ roomId, message, sender }) => {
+    socket.to(roomId).emit('receive-message', { message, sender });
   });
 
   socket.on('disconnect', () => {
@@ -73,12 +74,11 @@ io.on('connection', (socket) => {
   });
 });
 
-// Connect to MongoDB and start the server
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('MongoDB Connected');
-    const PORT = process.env.PORT || 5000;
-    server.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
-  })
-  .catch((err) => console.error('MongoDB connection error:', err));
+// Make io accessible throughout the app (optional)
+app.set('io', io);
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
