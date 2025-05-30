@@ -10,21 +10,31 @@ const Message = require('./models/messageModel');
 
 dotenv.config();
 const app = express();
-
 const server = http.createServer(app);
 
-const allowedOrigin = 'https://tradetrek-nu.vercel.app'; // <-- update this to your exact frontend origin
+// Allow multiple frontend origins
+const allowedOrigins = [
+  'https://tradetrek-nu.vercel.app',
+  'https://tradetrek-frontend.onrender.com',
+];
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigin,
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
 
+// CORS middleware for Express
 app.use(cors({
-  origin: allowedOrigin,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
@@ -39,6 +49,7 @@ app.get('/', (req, res) => {
   res.send('Hello from backend');
 });
 
+// Socket.io handlers
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -63,6 +74,7 @@ io.on('connection', (socket) => {
   });
 });
 
+// MongoDB connection and server start
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
