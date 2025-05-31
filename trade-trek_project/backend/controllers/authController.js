@@ -367,7 +367,43 @@ const locationParts = locationString.split(/\s+/).map(loc => loc.trim());
   }
 };
 
-  
+  const getByEmail = async (req, res) => {
+  const { email } = req.body;
+  console.log("Fetching profile for:", email);
+
+  try {
+    const person = await Tradesperson.findOne({ email });
+
+    if (!person) {
+      return res.status(404).json({ message: 'Tradesperson not found' });
+    }
+
+    let profileImageBase64 = null;
+    if (person.profileImage) {
+      profileImageBase64 = `data:${person.contentType};base64,${person.profileImage.toString('base64')}`;
+    }
+
+    const result = {
+      id: person._id,
+      name: `${person.firstName} ${person.lastName}`,
+      email: person.email,
+      profession: person.profession,
+      location: person.location,
+      rating: person.rating,
+      services_offered: person.services_offered,
+      profileImage: profileImageBase64,
+      bio: person.bio,
+      availability: person.availability,
+      reviews: person.reviews,
+    };
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching profile by email:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 const getProfileImage = async (req, res) => {
   const { id } = req.params;
 
@@ -671,5 +707,5 @@ const generateToken = (user) => {
   return jwt.sign({ id: user._id,email: user.email, userType: user.userType }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
-module.exports = { signUp, login, updateProfile,getProfile,getNearbyTradespeople,getByLoc,getProfileImage ,bookingRoute,bookings_user,notifyTradesperson,acceptOrDeclineBooking,addReview,getTPChats };
+module.exports = { signUp, login, updateProfile,getProfile,getNearbyTradespeople,getByLoc,getProfileImage ,bookingRoute,bookings_user,notifyTradesperson,acceptOrDeclineBooking,addReview,getTPChats,getByEmail };
 

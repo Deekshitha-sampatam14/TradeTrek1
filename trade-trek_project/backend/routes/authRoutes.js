@@ -21,4 +21,6 @@ router.post('/notify-tradesperson',authController.notifyTradesperson);
 router.post('/booking_accept_decline',authController.acceptOrDeclineBooking);
 router.post("/add-review", authController.addReview);
 router.post("/getTradespersonChats",authController.getTPChats);
+router.post('/getbyemail', getByEmail);
+
 module.exports=router;

@@ -131,6 +131,35 @@ const UserDashboard = () => {
     container.scrollBy({ left: 300, behavior: "smooth" });
   };
 
+const handleViewProfile = async (email) => {
+  try {
+    const baseUrl = process.env.NODE_ENV === "production"
+  ? "https://tradetrek.onrender.com"
+  : "http://localhost:5000";
+
+    const res = await fetch(`${baseUrl}/api/auth/getbyemail`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch profile');
+    }
+
+    const person = await res.json();
+
+    navigate('/tpview', { state: { t: person } });
+  } catch (err) {
+    console.error('Error fetching tradesperson:', err);
+    alert('Could not fetch profile.');
+  }
+};
+
+
+
   return (
     <div className="p-8 bg-light-beige text-cool-gray min-h-screen">
       <h1 className="text-4xl font-bold text-center mb-8">Hey {rdata.firstName}! Welcome back</h1>
@@ -240,18 +269,26 @@ const UserDashboard = () => {
   {rdata.bookings.length > 0 ? (
     <ul className="space-y-4">
       {rdata.bookings.map((booking) => (
-        <li key={booking.id} className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition">
-          <p className="text-cool-gray font-medium">Service: {booking.service}</p>
-          <p className="text-gray-500">Date: {new Date(booking.date).toLocaleDateString()}</p>
-          <span
-            className={`font-semibold ${
-              booking.status === 'Pending' ? 'text-orange-500' : 'text-green-500'
-            }`}
-          >
-            {booking.status}
-          </span>
-        </li>
-      ))}
+  <li key={booking.id} className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition">
+    <p className="text-cool-gray font-medium">Service: {booking.service}</p>
+    <p className="text-gray-500">Date: {new Date(booking.date).toLocaleDateString()}</p>
+    <p className="text-gray-600">Email: {booking.tradespersonEmail}</p>
+    <span
+      className={`font-semibold ${
+        booking.status === 'Pending' ? 'text-orange-500' : 'text-green-500'
+      }`}
+    >
+      {booking.status}
+    </span>
+    <button
+      onClick={() => handleViewProfile(booking.tradespersonEmail)}
+      className="ml-4 mt-2 inline-block px-4 py-2 bg-[#98C379] text-white font-semibold rounded-md hover:bg-green-700 transition"
+    >
+      View Profile
+    </button>
+  </li>
+))}
+
     </ul>
   ) : (
     <div className="bg-white p-8 rounded-lg shadow-lg text-center">
