@@ -44,17 +44,14 @@ app.get('/', (req, res) => {
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
-  // Join room
   socket.on("join-room", async (roomId) => {
     socket.join(roomId);
     console.log(`User joined room: ${roomId}`);
 
-    // Send previous messages
     const previousMessages = await Message.find({ roomId }).sort({ timestamp: 1 });
     socket.emit("previous_messages", previousMessages);
   });
 
-  // Handle message send
   socket.on("send-message", async (data) => {
     const { sender, senderName, text, timestamp, roomId } = data;
 
@@ -64,13 +61,12 @@ io.on("connection", (socket) => {
     io.to(roomId).emit("receive-message", data);
   });
 
-  // Disconnect
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });
 });
 
-// Serve frontend build (for production)
+// Serve frontend build (optional for monorepo deployment)
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend", "build", "index.html"));
@@ -78,13 +74,14 @@ app.get("*", (req, res) => {
 
 // Connect to MongoDB and Start Server
 const PORT = process.env.PORT || 5000;
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
   console.log('MongoDB Connected');
   server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
   });
 }).catch((err) => {
   console.error('MongoDB connection error:', err);
