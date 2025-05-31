@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 // Create Socket.io server
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'https://tradetrek-nu.vercel.app',
+    origin: process.env.CLIENT_URL || 'https://trade-trek1.vercel.app',
     methods: ['GET', 'POST'],
     credentials: true,
   }
@@ -27,7 +27,7 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://tradetrek-nu.vercel.app',
+  origin: process.env.CLIENT_URL || 'https://trade-trek1.vercel.app',
   credentials: true,
 }));
 app.use(express.json());
